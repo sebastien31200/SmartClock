@@ -123,35 +123,6 @@ if (process.env.NODE_ENV != "development") {
   }
 }
 
-function treatMessage(message, res) {
-  const twiml = new MessagingResponse();
-
-  if (message.toLowerCase() == "off") {
-    console.log("Switching screen to off");
-    twiml.message("Switching screen to off");
-    raspberry.setScreenOn(0);
-  } else if (message.toLowerCase() == "on") {
-    console.log("Switching screen to on");
-    twiml.message("Switching screen to on");
-    io.sockets.emit("refreshWeather", "");
-    raspberry.setScreenOn(1);
-  } else if (message.toLowerCase() == "reboot") {
-    console.log("Rebooting");
-    twiml.message("Rebooting Raspberry");
-    raspberry.reboot();
-  } else if (message.toLowerCase() == "shutdown") {
-    console.log("Shutdown");
-    twiml.message("Shutdown Raspberry");
-    raspberry.shutdown();
-  } else {
-    raspberry.setScreenOn(1);
-    io.sockets.emit("message", message);
-  }
-  res.writeHead(200, { "Content-Type": "text/xml" });
-  res.statusCode = 200;
-  res.end(twiml.toString());
-}
-
 if (process.env.NODE_ENV != "development") {
   let date = new Date();
   if (date.getHours() > 19) {
