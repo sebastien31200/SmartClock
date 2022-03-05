@@ -106,8 +106,8 @@ export default {
 
       //Show daily citation at 7:00
       if (h == 7 && m == 0 && s < 2) {
-        console.log("Show citation");
-        this.$emit("showCitationMessage");
+        //console.log("Show citation");
+        //this.$emit("showCitationMessage");
       }
 
       //Update weather periodically (2times/h)
