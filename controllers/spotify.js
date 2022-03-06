@@ -206,7 +206,10 @@ function performSpotifyOperation(sockets, callback) {
   //Load spotify credential file
   fs.readFile(SPOTIFY_TOKEN_PATH, (err, content) => {
     if (err)
-      return logs.timeLog("Error loading file: " + SPOTIFY_TOKEN_PATH, err);
+      return logs.timeLog(
+        "[Spotify] Error loading file: " + SPOTIFY_TOKEN_PATH,
+        err
+      );
 
     //logs.timeLog("CONTENT: " + content);
 
@@ -225,7 +228,7 @@ function performSpotifyOperation(sockets, callback) {
     if (now <= expirationDate) {
       tokenToRefresh = false;
     } else {
-      logs.timeLog("Token to refresh");
+      logs.timeLog("[Spotify] Token to refresh");
     }
 
     var spotifyApi = new SpotifyWebApi({
@@ -238,7 +241,7 @@ function performSpotifyOperation(sockets, callback) {
 
       spotifyApi.refreshAccessToken().then(
         function (data) {
-          logs.timeLog("The access token has been refreshed!");
+          logs.timeLog("[Spotify] The access token has been refreshed!");
 
           // Save the refreshed access token
           var access_token = data.body["access_token"];
@@ -258,7 +261,7 @@ function performSpotifyOperation(sockets, callback) {
           fs.writeFile(SPOTIFY_TOKEN_PATH, JSON.stringify(token), (err) => {
             if (err) console.error(err);
             logs.timeLog(
-              "Refreshed token stored in file: ",
+              "[Spotify] Refreshed token stored in file: ",
               SPOTIFY_TOKEN_PATH
             );
           });
@@ -266,7 +269,7 @@ function performSpotifyOperation(sockets, callback) {
           callback(spotifyApi, sockets);
         },
         function (err) {
-          logs.timeLog("Could not refresh the access token", err);
+          logs.timeLog("[Spotify] Could not refresh the access token", err);
         }
       );
     } else {

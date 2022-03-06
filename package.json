@@ -29,9 +29,9 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/sebastien31200/SmartClock-Server.git"
+        "url": "git+https://github.com/sebastien31200/SmartClock.git"
     },
     "author": "",
     "license": "ISC",
-    "homepage": "https://github.com/sebastien31200/SmartClock-Server.git#readme"
+    "homepage": "https://github.com/sebastien31200/SmartClock.git#readme"
 }

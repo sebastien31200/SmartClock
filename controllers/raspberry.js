@@ -58,8 +58,8 @@ function execCommand(command) {
     }
 
     // the *entire* stdout and stderr (buffered)
-    logs.timeLog(`${stdout}`);
-    logs.timeLog(`${stderr}`);
+    console.log(`${stdout}`);
+    console.log(`${stderr}`);
   });
 }
 
