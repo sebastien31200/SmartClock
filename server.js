@@ -25,13 +25,12 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 var serveStatic = require("serve-static");
 app.use(serveStatic(__dirname + "/vue-app/dist"));
 
-/* User function */
+/* Controllers */
 var spotify = require("./controllers/spotify.js");
 var raspberry = require("./controllers/raspberry.js");
 var arduino = require("./controllers/arduino.js");
 var garmin = require("./controllers/garmin.js");
-
-var incomingBody = "";
+var lights = require("./controllers/lights.js");
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/html");
@@ -62,6 +61,26 @@ io.on("connection", function (socket) {
   socket.on("disconnect", function () {
     logs.timeLog("Client disconnected");
     clearInterval(refreshInterval);
+  });
+
+  //Get light status request from client
+  socket.on("getAllLights", function (data) {
+    logs.timeLog("Receive getAllLights message");
+    lights.getAllLightsStatus(io.sockets);
+  });
+
+  //Get light status request from client
+  socket.on("setAllLights", function (data) {
+    logs.timeLog("Receive setAllLights message");
+    console.log(data);
+    lights.setAllLightsStatus(data, io.sockets);
+  });
+
+  //Get light status request from client
+  socket.on("setKitchenLight", function (data) {
+    logs.timeLog("Receive setKitchenLight message");
+    console.log(data);
+    lights.setKitchenLightOnly(data, io.sockets);
   });
 
   //Start garmin service
