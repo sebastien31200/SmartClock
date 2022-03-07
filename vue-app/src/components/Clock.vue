@@ -1,11 +1,11 @@
 <template>
-  <div id="current-date" style="text-align:center">
-    <div style="font-size:8rem !important">{{ time }}</div>
+  <div id="current-date" style="text-align: center">
+    <div style="font-size: 8rem !important">{{ time }}</div>
     <v-row>
       <div id="in" v-bind:class="classSelector">
         <i class="text-h3 mdi mdi-home"></i>
         <v-list-item>
-          <v-list-item-icon style="font-size:40"
+          <v-list-item-icon style="font-size: 40"
             ><v-icon class="pt-1" size="40"
               >mdi-thermometer</v-icon
             ></v-list-item-icon
@@ -24,7 +24,7 @@
       <div id="out" v-bind:class="classSelector">
         <i class="text-h3 mdi mdi-pine-tree"></i>
         <v-list-item>
-          <v-list-item-icon style="font-size:40"
+          <v-list-item-icon style="font-size: 40"
             ><v-icon class="pt-1" size="40"
               >mdi-thermometer</v-icon
             ></v-list-item-icon
@@ -43,14 +43,13 @@
     </v-row>
   </div>
 </template>
-<style scoped>
-</style>
+<style scoped></style>
 <script>
 import axios from "axios";
 import { openMeteoApiSettings } from "./weather/WeatherUtils";
 
 export default {
-  data: function() {
+  data: function () {
     return {
       hours: 12,
       minutes: 0,
@@ -59,29 +58,29 @@ export default {
       inHumidity: 0,
       weatherTemperature: 0,
       weatherWindSpeed: 0,
-      success: false
+      success: false,
     };
   },
 
   computed: {
-    time: function() {
+    time: function () {
       return this.hours + ":" + this.minutes;
     },
 
-    classSelector: function() {
+    classSelector: function () {
       return {
-        mobileClass: this.isMobile()
+        mobileClass: this.isMobile(),
       };
-    }
+    },
   },
 
-  mounted: function() {
+  mounted: function () {
     this.startTime();
     this.updateWeather();
     this.$socket.emit("getTemperature", "");
   },
 
-  destroyed: function() {
+  destroyed: function () {
     clearTimeout(this.$timeout);
   },
 
@@ -89,11 +88,11 @@ export default {
     temperatureMessage(data) {
       this.inTemperature = data.temperature + " °C";
       this.inHumidity = Math.round(data.humidity) + " %";
-    }
+    },
   },
 
   methods: {
-    startTime: function() {
+    startTime: function () {
       var today = new Date();
       var h = today.getHours();
       var m = today.getMinutes();
@@ -116,7 +115,7 @@ export default {
       }
     },
 
-    checkTime: function(i) {
+    checkTime: function (i) {
       if (i < 10) {
         i = "0" + i;
       } // add zero in front of numbers < 10
@@ -125,7 +124,7 @@ export default {
 
     updateWeather() {
       console.log("Update current temperature and wind");
-      axios.get(openMeteoApiSettings.hourlyApiUrl).then(response => {
+      axios.get(openMeteoApiSettings.hourlyApiUrl).then((response) => {
         var data = response.data;
 
         //Current weather
@@ -146,8 +145,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

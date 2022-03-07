@@ -127,7 +127,7 @@ io.on("connection", function (socket) {
   });
 });
 
-server.listen(process.env.VUE_APP_SERVER_PORT, () => {
+server.listen(process.env.SERVER_PORT, () => {
   const port = server.address().port;
   logs.timeLog(`App listening on port ${port}`);
 });

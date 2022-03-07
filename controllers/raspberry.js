@@ -15,7 +15,7 @@ exports.setScreenOn = function (on) {
 exports.startBrowser = function () {
   let command =
     "chromium-browser http://localhost:" +
-    process.env.VUE_APP_SERVER_PORT +
+    process.env.SERVER_PORT +
     " --start-fullscreen";
   execCommand(command);
 };
