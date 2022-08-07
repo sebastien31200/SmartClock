@@ -28,7 +28,6 @@ app.use(serveStatic(__dirname + "/vue-app/dist"));
 /* Controllers */
 var spotify = require("./controllers/spotify.js");
 var raspberry = require("./controllers/raspberry.js");
-var arduino = require("./controllers/arduino.js");
 var garmin = require("./controllers/garmin.js");
 var lights = require("./controllers/lights.js");
 
@@ -55,7 +54,7 @@ io.on("connection", function (socket) {
 
   var refreshTempDelay = 600; //seconds
   var refreshInterval = setInterval(() => {
-    json = arduino.getTemperatureAndHumidity(io.sockets);
+    json = raspberry.getTemperatureAndHumidity(io.sockets);
   }, 1000 * refreshTempDelay);
 
   socket.on("disconnect", function () {
@@ -89,19 +88,7 @@ io.on("connection", function (socket) {
   //Temperature request from client
   socket.on("getTemperature", function (data) {
     logs.timeLog("Receive getTemperature message");
-    arduino.getTemperatureAndHumidity(io.sockets);
-  });
-
-  //Relay status request from client
-  socket.on("getHeaterStatus", function (data) {
-    logs.timeLog("Receive getHeaterStatus message");
-    arduino.getRelayStatus(io.sockets);
-  });
-
-  //Relay status command from client
-  socket.on("heaterCommand", function (data) {
-    logs.timeLog("Heater command: " + data);
-    arduino.setRelay(data);
+    raspberry.getTemperatureAndHumidity(io.sockets);
   });
 
   socket.on("playerCommand", function (data) {
@@ -164,16 +151,6 @@ schedule.scheduleJob("00 7 * * *", function () {
 /* Increase brightness at 12h*/
 schedule.scheduleJob("00 12 * * *", function () {
   raspberry.setBrightnessPct(18);
-});
-
-/* Decrease brightness at 19h and switch on relay (guirlande)*/
-schedule.scheduleJob("00 19 * * *", function () {
-  raspberry.setBrightnessPct(10);
-  arduino.setRelay("true");
-});
-
-schedule.scheduleJob("00 21 * * *", function () {
-  arduino.setRelay("false");
 });
 
 /*Switch off screen at 23h00*/

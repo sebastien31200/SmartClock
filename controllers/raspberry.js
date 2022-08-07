@@ -1,3 +1,5 @@
+var sensor = require("node-dht-sensor");
+
 const { exec } = require("child_process");
 var logs = require("../log.js");
 
@@ -63,4 +65,18 @@ function execCommand(command) {
   });
 }
 
+function getTemperatureAndHumidity(sockets) {
+  logs.timeLog("[Raspberry] Get temperature and humidity");
+  sensor.read(22, 14, function (err, temperature, humidity) {
+    if (!err) {
+      console.log(`temp: ${temperature}°C, humidity: ${humidity}%`);
+      temperature = Math.round(temperature * 10) / 10; //Round first decimal
+      var message = { temperature: temperature, humidity: humidity };
+      console.log(message);
+      sockets.emit("temperatureMessage", message);
+    }
+  });
+}
+
 exports.execCommand = execCommand;
+exports.getTemperatureAndHumidity = getTemperatureAndHumidity;
