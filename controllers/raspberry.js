@@ -69,11 +69,10 @@ function getTemperatureAndHumidity(sockets) {
   logs.timeLog("[Raspberry] Get temperature and humidity");
   sensor.read(22, 14, function (err, temperature, humidity) {
     if (!err) {
-      console.log(`temp: ${temperature}°C, humidity: ${humidity}%`);
       temperature = Math.round(temperature * 10) / 10; //Round first decimal
-      temperature = temperature - 2.7; //2.5deg over estimate due to raspberry internal heat
+      //temperature = temperature - 2.7; //2.5deg over estimate due to raspberry internal heat
       var message = { temperature: temperature, humidity: humidity };
-      console.log(message);
+      logs.timeLog(`Temperature: ${temperature}°C`);
       sockets.emit("temperatureMessage", message);
     }
   });

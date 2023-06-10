@@ -52,7 +52,7 @@ io.on("connection", function (socket) {
   logs.timeLog("Client connected");
   socket.emit("connectionMessage", "Hello from server");
 
-  var refreshTempDelay = 600; //seconds
+  var refreshTempDelay = 300; //seconds
   var refreshInterval = setInterval(() => {
     json = raspberry.getTemperatureAndHumidity(io.sockets);
   }, 1000 * refreshTempDelay);
