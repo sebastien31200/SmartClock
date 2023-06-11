@@ -69,7 +69,6 @@ exports.infos = function (sockets) {
   performSpotifyOperation(sockets, (spotifyApi, sockets) => {
     spotifyApi.getMyCurrentPlaybackState().then(
       function (data) {
-        console.log(data);
         if (data.body.device != undefined && data.body.item != undefined) {
           info = {
             playback: data.body.device.name,

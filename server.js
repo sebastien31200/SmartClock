@@ -31,6 +31,7 @@ var raspberry = require("./controllers/raspberry.js");
 var garmin = require("./controllers/garmin.js");
 var lights = require("./controllers/lights.js");
 var bus = require("./controllers/bus.js");
+var bikes = require("./controllers/bikes.js");
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/html");
@@ -93,14 +94,19 @@ io.on("connection", function (socket) {
     raspberry.getTemperatureAndHumidity(io.sockets);
   });
 
-  socket.on("playerCommand", function (data) {
-    logs.timeLog("Player command: " + data);
+  socket.on("playerCommand", function (command) {
+    logs.timeLog(`Player command: ${command}`);
     spotify.player(io.sockets, data);
   });
 
-  socket.on("getBusStopSchedules", function (data) {
-    logs.timeLog("Get bus schedules for stop id: " + data);
-    bus.getStopSchedules(io.sockets, data);
+  socket.on("getBusStopSchedules", function (stopId) {
+    logs.timeLog(`Get bus schedules for stop id: ${stopId}`);
+    bus.getStopSchedules(io.sockets, stopId);
+  });
+
+  socket.on("getBikesAvailability", function (stationId) {
+    logs.timeLog(`Get bikes availability for station: ${stationId}`);
+    bikes.getAvailability(io.sockets, stationId);
   });
 
   var spotifyPlayerRefreshTimer = null;

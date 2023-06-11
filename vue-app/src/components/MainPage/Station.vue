@@ -43,9 +43,6 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import { apiSettings } from "./MainPageUtils";
-
   export default {
     props: ["stationId", "name", "color"],
     data: function () {
@@ -72,21 +69,16 @@
     },
 
     mounted: function () {
-      axios
-        .get(
-          apiSettings.jcDecauxApiUrl +
-            this.stationId +
-            "?contract=toulouse&apiKey=" +
-            apiSettings.apiKey
-        )
-        .then((response) => {
-          console.log(response);
-          var data = response.data;
-          this.bikes = data.totalStands.availabilities.bikes;
-          this.capacity = data.totalStands.capacity;
-          this.valid = data.connected && data.status == "OPEN";
-          this.success = true;
-        });
+      this.$socket.emit("getBikesAvailability", this.stationId);
+    },
+
+    sockets: {
+      bikesAvailability(data) {
+        this.bikes = data.totalStands.availabilities.bikes;
+        this.capacity = data.totalStands.capacity;
+        this.valid = data.connected && data.status == "OPEN";
+        this.success = true;
+      },
     },
   };
 </script>

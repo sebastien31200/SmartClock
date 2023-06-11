@@ -97,5 +97,4 @@ function setLightStatus(light, on, bri, hue, sat) {
   });
 
   logs.timeLog("[Lights] " + light.id + " PUT");
-  console.log(json);
 }
