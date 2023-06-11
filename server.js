@@ -30,11 +30,13 @@ var spotify = require("./controllers/spotify.js");
 var raspberry = require("./controllers/raspberry.js");
 var garmin = require("./controllers/garmin.js");
 var lights = require("./controllers/lights.js");
+var bus = require("./controllers/bus.js");
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/html");
   res.send("<h1> Welcome to SmartClock Web Server <h1> ");
 });
+
 //Spotify management
 app.get("/spotify/token", spotify.token);
 app.get("/spotify/infos", spotify.infos);
@@ -94,6 +96,11 @@ io.on("connection", function (socket) {
   socket.on("playerCommand", function (data) {
     logs.timeLog("Player command: " + data);
     spotify.player(io.sockets, data);
+  });
+
+  socket.on("getBusStopSchedules", function (data) {
+    logs.timeLog("Get bus schedules for stop id: " + data);
+    bus.getStopSchedules(io.sockets, data);
   });
 
   var spotifyPlayerRefreshTimer = null;

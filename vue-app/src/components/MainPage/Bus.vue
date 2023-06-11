@@ -4,7 +4,7 @@
     elevation="10"
     width="300"
     height="200"
-    @click="refreshSchedule"
+    @click="refreshBusSchedule"
     v-if="success"
   >
     <v-list dense class="pa-0">
@@ -62,9 +62,6 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import { apiSettings } from "./MainPageUtils";
-
   export default {
     props: ["color"],
 
@@ -85,38 +82,12 @@
       },
     },
     mounted: function () {
-      this.refreshSchedule();
+      this.refreshBusSchedule();
     },
     methods: {
-      refreshSchedule() {
+      refreshBusSchedule() {
         console.log("Refresh bus schedule");
-        axios.get(apiSettings.tisseoApiUrl).then((response) => {
-          var departures = response.data.departures;
-          var departureList = departures.departure;
-          for (let i = 0; i < departureList.length; i++) {
-            var departure = departureList[i];
-            var destination = departure.destination[0]["name"];
-            if (
-              destination == "Jeanne d'Arc" ||
-              destination == "Fonsegrives Entiore"
-            ) {
-              var dateTime = new Date(departure.dateTime);
-              var currentTime = new Date();
-              var schedule = this.msToMin(dateTime - currentTime) + " min";
-              var lane = departure.line.shortName;
-              var color = "rgb" + departure.line.color;
-              if (this.items.length < 4) {
-                this.items.push({
-                  lane: lane,
-                  schedule: schedule,
-                  color: color,
-                  icon: "mdi-bus",
-                });
-              }
-            }
-          }
-          this.success = true;
-        });
+        this.$socket.emit("getBusStopSchedules", "SA_1631");
       },
       msToMin: function (s) {
         var ms = s % 1000;
@@ -126,6 +97,36 @@
         var mins = s % 60;
 
         return mins;
+      },
+    },
+    sockets: {
+      busStopSchedules(data) {
+        console.log(data);
+        var departures = data.departures;
+        var departureList = departures.departure;
+        for (let i = 0; i < departureList.length; i++) {
+          var departure = departureList[i];
+          var destination = departure.destination[0]["name"];
+          if (
+            destination == "Jeanne d'Arc" ||
+            destination == "Fonsegrives Entiore"
+          ) {
+            var dateTime = new Date(departure.dateTime);
+            var currentTime = new Date();
+            var schedule = this.msToMin(dateTime - currentTime) + " min";
+            var lane = departure.line.shortName;
+            var color = "rgb" + departure.line.color;
+            if (this.items.length < 4) {
+              this.items.push({
+                lane: lane,
+                schedule: schedule,
+                color: color,
+                icon: "mdi-bus",
+              });
+            }
+          }
+        }
+        this.success = true;
       },
     },
   };
