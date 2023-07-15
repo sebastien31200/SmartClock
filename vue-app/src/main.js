@@ -4,7 +4,7 @@ import Vuetify from "vuetify/lib";
 import VueSocketIO from "vue-socket.io";
 import SocketIO from "socket.io-client";
 
-console.log("Environment: " + process.env.NODE_ENV);
+console.log(`Environment: ${process.env.NODE_ENV}`);
 Vue.prototype.$clockTimer = process.env.VUE_APP_TIMER_SEC; //120 seconds to ease debug
 Vue.config.productionTip = false;
 //Ignore annoying warning
@@ -25,6 +25,8 @@ var vuetify = new Vuetify({
 
 var serverUrl =
   process.env.VUE_APP_SERVER_URL + ":" + process.env.VUE_APP_SERVER_PORT;
+console.log(`Environment: ${serverUrl}`);
+
 Vue.use(
   new VueSocketIO({
     debug: false,

@@ -133,7 +133,10 @@ server.listen(process.env.SERVER_PORT, () => {
 });
 
 /* Launch Chromium browser*/
-if (process.env.NODE_ENV != "development") {
+if (
+  process.env.NODE_ENV != "development" &&
+  process.env.GAE_APPLICATION == ""
+) {
   logs.timeLog("Starting Chromium browser");
   nohmi = argumentsArray.includes("nohmi"); //no hmi mode
   if (!nohmi) {
@@ -142,7 +145,10 @@ if (process.env.NODE_ENV != "development") {
   }
 }
 
-if (process.env.NODE_ENV != "development") {
+if (
+  process.env.NODE_ENV != "development" &&
+  process.env.GAE_APPLICATION == ""
+) {
   let date = new Date();
   if (date.getHours() > 19) {
     logs.timeLog("Init brigthness to 12%");
